@@ -94,7 +94,17 @@
 		<c:forEach var="list" items="${list }">
 	      	<tr>
 	      		<td>${list.rownum }</td>
-	      		<td><a href="/boarddetail?aIdx=${list.aIdx}">${list.aTitle }</a></td>
+	      		<td class="tdAlign">
+	      			<c:if test="${list.aDepth > 1 }">
+						<c:forEach begin="2" end="${list.aDepth}">
+							&nbsp;&nbsp;
+						</c:forEach>
+						<c:forEach begin="2" end="${list.aDepth}">
+							┕
+						</c:forEach>
+					</c:if>
+				<a href="/boarddetail?aIdx=${list.aIdx}">${list.aTitle }</a>
+				</td>	  
 	      		<td>${list.aContent }</td>
 	      		<td>${list.user.uName }</td>
 	      		<td>${list.aDate }</td>

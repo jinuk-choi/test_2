@@ -14,13 +14,15 @@
 	<result column="a_content" property="aContent"/>
 	<result column="a_date" property="aDate"/>
 	<result column="a_count" property="aCount"/>
+	<result column="a_group" property="aGroup"/>
+	<result column="a_order" property="aOrder"/>
+	<result column="a_depth" property="aDepth"/>
 	<association property="user" resultMap="User"/>
 </resultMap> 
  
 	<select id="selectBoardList" parameterType="Board" resultMap="Board">
     	  SELECT         @ROWNUM := @ROWNUM - 1 AS ROWNUM,  	   		   	     	  		  	   	  
-     					 ta.*, tb.u_idx, tb.u_name
-		                
+     					 ta.*, tb.u_idx, tb.u_name		             
 	      FROM           board ta
 	      LEFT JOIN 	 user tb ON ta.u_idx = tb.u_idx	,
 	    				 (SELECT @rownum := (SELECT	COUNT(*)-#{pageNum}+1 FROM board ta)) tc
@@ -41,8 +43,8 @@
 				    	  	</if>				    	
 						</where>
 	   				</if>
-	    	  	  		   	
-	      LIMIT			 #{pageNum},3
+	      ORDER BY				a_group DESC, a_order DESC	  	  		   	
+	      LIMIT					#{pageNum},3
 	</select>
 	
 <!-- 게시글 상세보기 -->
@@ -59,12 +61,27 @@
 	<insert id="insertBoard" parameterType="Board">
 		INSERT INTO board (
 			a_title,
-			a_content
+			a_content,
+			a_group,
+			a_order,
+			a_depth,
+			u_idx
 		) VALUES (
 			#{aTitle},
-			#{aContent}
+			#{aContent},
+			#{aGroup},
+			#{aOrder},
+			#{aDepth},
+			#{uIdx}
 		)
-	</insert>
+		
+	<!--  <if test="aGroup == 0">
+			UPDATE board SET a_group = LAST_INSERT_ID() WHERE a_idx = LAST_INSERT_ID()
+		</if>
+		<if test="aGroup != 0">
+			UPDATE board SET a_order = a_order + 1 where a_group = #{aGroup} and a_order >= #{aOrder} and a_idx != last_insert_id()
+		</if>   -->
+	</insert>  
 
 <!-- 게시글 수정하기 -->
 	<insert id="editBoard" parameterType="Board">

@@ -8,9 +8,29 @@ public class Board {
 	private String aDate;
 	private int rownum;
 	private User user;
+	private int aGroup;
+	private int aOrder;
+	private int aDepth;
 	
 	
-	
+	public int getaGroup() {
+		return aGroup;
+	}
+	public void setaGroup(int aGroup) {
+		this.aGroup = aGroup;
+	}
+	public int getaOrder() {
+		return aOrder;
+	}
+	public void setaOrder(int aOrder) {
+		this.aOrder = aOrder;
+	}
+	public int getaDepth() {
+		return aDepth;
+	}
+	public void setaDepth(int aDepth) {
+		this.aDepth = aDepth;
+	}
 	public int getuIdx() {
 		return uIdx;
 	}
