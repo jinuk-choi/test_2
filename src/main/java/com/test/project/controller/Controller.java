@@ -1,5 +1,6 @@
 package com.test.project.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,8 +82,12 @@ public class Controller {
 		return "/boarddetail";
 	}
 	
-	@RequestMapping("/boardinsert") 
-	public String boardInsert() {
+	@RequestMapping({"/boardinsert", "/boardinsert/{group}/{order}/{depth}"}) 
+	public String boardInsert(
+			@PathVariable Optional<Integer> group,
+			@PathVariable Optional<Integer> order,
+			@PathVariable Optional<Integer> depth	) {
+		
 		return "/boardinsert";
 	}
 	
@@ -132,8 +137,9 @@ public class Controller {
 	 @RequestMapping("/signup")
 	   public String signup(User user) {
 	      //비밀번호 암호화
+		 
 	      String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-	      
+	     
 	      //유저 데이터 세팅
 	      user.setPassword(encodedPassword);
 	      user.setAccountNonExpired(true);
