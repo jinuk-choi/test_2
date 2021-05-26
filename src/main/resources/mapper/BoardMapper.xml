@@ -58,7 +58,8 @@
 	</select>   
 	
 <!-- 게시글 작성하기 -->
-	<insert id="insertBoard" parameterType="Board">
+	<insert id="insertBoard" parameterType="Board" >
+	
 		INSERT INTO board (
 			a_title,
 			a_content,
@@ -74,8 +75,11 @@
 			#{aDepth},
 			#{uIdx}
 		)
-		
-	<!--  <if test="aGroup == 0">
+<!--	<selectKey resultType="integer" keyProperty="aDepth" order="AFTER">
+        SELECT MAX(a_depth)+1 FROM board        
+    </selectKey>
+	
+	  <if test="aGroup == 0">
 			UPDATE board SET a_group = LAST_INSERT_ID() WHERE a_idx = LAST_INSERT_ID()
 		</if>
 		<if test="aGroup != 0">
