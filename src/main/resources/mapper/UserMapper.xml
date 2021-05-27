@@ -14,6 +14,7 @@
       SELECT         u_id                 						    as   username,
 			                 u_password             					as password,
 			                 u_name                						as   uName,
+			                 u_idx										as	 uIdx,
 			                 u_isAccountNonExpired        as isAccountNonExpired,
 			                 u_isAccountNonLocked    	    as isAccountNonLocked,
 			                 u_isCredentialNonExpired    as isCredentialsNonExpired,

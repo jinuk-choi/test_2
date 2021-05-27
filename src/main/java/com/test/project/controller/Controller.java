@@ -1,6 +1,5 @@
 package com.test.project.controller;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.test.project.domain.Pagination;
+import com.test.project.config.SecurityController;
 import com.test.project.domain.Board;
+import com.test.project.domain.Pagination;
 import com.test.project.domain.Search;
 import com.test.project.domain.User;
 import com.test.project.service.BoardService;
@@ -38,7 +39,7 @@ public class Controller {
 	
 	@RequestMapping("/")
 	public String home(Model model) {
-	
+		
 		pagination = new Pagination(page, count);
 		boardList = boardservice.selectBoardList(pagination);
 		
@@ -82,17 +83,20 @@ public class Controller {
 		return "/boarddetail";
 	}
 	
-	@RequestMapping({"/boardinsert", "/boardinsert/{group}/{order}/{depth}"}) 
-	public String boardInsert(
-			@PathVariable Optional<Integer> group,
-			@PathVariable Optional<Integer> order,
-			@PathVariable Optional<Integer> depth	) {
-		
+	@RequestMapping("/boardinsert") 
+	public String boardInsert(Board board,Model model,Authentication au) {
+		User user = (User)au.getPrincipal();
+		board.setuIdx(user.getuIdx());
+		model.addAttribute("principal", board);
+
 		return "/boardinsert";
+		
 	}
 	
 	@RequestMapping("/boardinserted") 
-	public String boardInserted(Board board,Model model) {
+	public String boardInserted(Board board,Model model,Authentication au) {
+		User user = (User)au.getPrincipal();
+		board.setuIdx(user.getuIdx());
 		boardservice.insertBoard(board);
 		boardList = boardservice.selectBoardList(pagination);
 		

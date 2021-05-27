@@ -75,17 +75,21 @@
 			#{aDepth},
 			#{uIdx}
 		)
-<!--	<selectKey resultType="integer" keyProperty="aDepth" order="AFTER">
-        SELECT MAX(a_depth)+1 FROM board        
-    </selectKey>
+		
+	<!--  	<selectKey  resultType="integer" keyProperty="aDepth" order="AFTER">
+        	SELECT LAST_INSERT_ID()        
+    	</selectKey>  -->
+	</insert> 
 	
+	
+	<!--
 	  <if test="aGroup == 0">
 			UPDATE board SET a_group = LAST_INSERT_ID() WHERE a_idx = LAST_INSERT_ID()
 		</if>
 		<if test="aGroup != 0">
 			UPDATE board SET a_order = a_order + 1 where a_group = #{aGroup} and a_order >= #{aOrder} and a_idx != last_insert_id()
 		</if>   -->
-	</insert>  
+	 
 
 <!-- 게시글 수정하기 -->
 	<insert id="editBoard" parameterType="Board">
