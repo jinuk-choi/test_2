@@ -82,5 +82,12 @@ public class Board {
 	public void setaDate(String aDate) {
 		this.aDate = aDate;
 	}
+	
+	@Override
+	public String toString() {
+		return "Board [aIdx=" + aIdx + ", uIdx=" + uIdx + ", aTitle=" + aTitle + ", aContent=" + aContent + ", aDate="
+				+ aDate + ", rownum=" + rownum + ", user=" + user + ", aGroup=" + aGroup + ", aOrder=" + aOrder
+				+ ", aDepth=" + aDepth + ", aCount=" + aCount + "]";
+	}
 
 }

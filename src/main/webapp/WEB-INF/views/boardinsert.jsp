@@ -9,9 +9,13 @@
 <title>게시글 작성</title>
 </head>
 <body>
+	<sec:authentication property="principal" var="principal" />
 	<h2> 게시글 작성 </h2>
-	<form action="boardinserted" name="board" method="post">
-		<input type="text" name="uIdx" value="${board.uIdx}">
+	<form action="/boardinserted" name="board" method="post">
+		<input type="hidden" name="uIdx" value="${principal.uIdx}">
+		<input type="hidden" name="aOrder" value="${board.aOrder}">
+		<input type="hidden" name="aDepth" value="${board.aDepth}">
+		<input type="hidden" name="aGroup" value="${board.aGroup}">
 		<p> 작성자 :<sec:authentication property="principal" var="principal"/>${principal.uName }</p>
 		<p> 제목 : <input type="text" name="aTitle"></p>
 		<p> 내용 : <input type="text" style="width:500px; height:500px;" name="aContent"></p>

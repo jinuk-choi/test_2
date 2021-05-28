@@ -48,18 +48,17 @@
 	</select>
 	
 <!-- 게시글 상세보기 -->
-	<select id="selectBoard" resultType="Board">
-		SELECT			 a_idx as aIdx,
-				                 a_title as aTitle,
-				                 a_content as aContent,
-				                 a_date as aDate
-		FROM			board 
+	<select id="selectBoard" resultType="Board" resultMap="Board">
+		SELECT			 ta.*, tb.u_idx, tb.u_name
+				             
+		FROM			board ta
+		LEFT JOIN       user tb ON ta.u_idx = tb.u_idx
 		WHERE			a_idx =	#{aIdx}
 	</select>   
 	
 <!-- 게시글 작성하기 -->
 	<insert id="insertBoard" parameterType="Board" >
-	
+    	
 		INSERT INTO board (
 			a_title,
 			a_content,
@@ -76,10 +75,35 @@
 			#{uIdx}
 		)
 		
-	<!--  	<selectKey  resultType="integer" keyProperty="aDepth" order="AFTER">
-        	SELECT LAST_INSERT_ID()        
-    	</selectKey>  -->
+	  	<selectKey keyProperty="aIdx" resultType="Integer">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
 	</insert> 
+
+<!-- 게시글 답글 -->
+<!--  	<insert id="updateBoard" parameterType="Board" >
+    	
+		INSERT INTO board (
+			a_title,
+			a_content,
+			a_group,
+			a_order,
+			a_depth,
+			u_idx
+		) VALUES (
+			#{aTitle},
+			#{aContent},
+			#{aGroup},
+			#{aOrder},
+			#{aDepth},
+			#{uIdx}
+		)
+		
+	  	<selectKey keyProperty="aIdx" resultType="Integer">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert> 
+-->
 	
 	
 	<!--

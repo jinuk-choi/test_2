@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.test.project.config.SecurityController;
 import com.test.project.domain.Board;
 import com.test.project.domain.Pagination;
 import com.test.project.domain.Search;
@@ -76,34 +75,36 @@ public class Controller {
 	}
 	
 	@RequestMapping("/boarddetail")
-	public String boardDetail(@RequestParam("aIdx") int aIdx, Model model) {
-	    board = boardservice.selectBoard(aIdx);
+	public String boardDetail(@RequestParam("aIdx") int aIdx, Model model) {			    
+	
+		board = boardservice.selectBoard(aIdx);
 		model.addAttribute("board", board);
-
+		
 		return "/boarddetail";
 	}
 	
 	@RequestMapping("/boardinsert") 
-	public String boardInsert(Board board,Model model,Authentication au) {
-		User user = (User)au.getPrincipal();
-		board.setuIdx(user.getuIdx());
-		model.addAttribute("principal", board);
+	public String boardInsert(Board board,Model model) {
+		
+//		User user = (User)au.getPrincipal();
+//		board.setuIdx(user.getuIdx());
+		
+		model.addAttribute("board", board);
 
 		return "/boardinsert";
 		
 	}
 	
 	@RequestMapping("/boardinserted") 
-	public String boardInserted(Board board,Model model,Authentication au) {
-		User user = (User)au.getPrincipal();
-		board.setuIdx(user.getuIdx());
+	public String boardInserted(Board board,Model model) {
+		
 		boardservice.insertBoard(board);
 		boardList = boardservice.selectBoardList(pagination);
 		
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("list", boardList);
 		model.addAttribute("board", board);
-		return "/boardlist";
+		return "/boardresult";
 	}
 	
 	@RequestMapping("/boardedit") 

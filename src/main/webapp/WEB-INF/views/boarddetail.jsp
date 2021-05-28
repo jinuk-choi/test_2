@@ -21,7 +21,7 @@
 </head>
 <body>
 	<h2> 게시글 상세보기 </h2>
-			<p> 작성자 : </p>
+			<p> 작성자 :${board.user.uName} </p>
 			<br>
 			<p> 제목 : ${board.aTitle}</p>
 			<br>
@@ -33,6 +33,9 @@
 		</td>
 		<td style="border:none; display:show;">
 			<a href="/boardelete?aIdx=${board.aIdx}" style="width:70%;font-weight:700;background-color:red;color:#fff;" >삭제</a>
+		</td>
+		<td style="border:none;">
+				 <a href="/boardinsert?aGroup=${board.aGroup}&aOrder=${board.aOrder}&aDepth=${board.aDepth}" style="width:80%;font-weight:700;background-color:#818181;color:#fff;" >답글쓰기</a>
 		</td>
 </table>
 <h2>댓글 작성</h2>

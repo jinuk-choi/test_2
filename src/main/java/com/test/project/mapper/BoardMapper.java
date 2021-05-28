@@ -19,5 +19,7 @@ public interface BoardMapper {
 	public void deleteBoard(Board board);
 	
 	public int countBoard(Search search);
+	
+	//public void updateBoard(Board board);
 }
 

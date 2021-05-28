@@ -17,4 +17,6 @@ public interface BoardService {
 	public void deleteBoard(Board board);
 	
 	public int countBoard(Search search);
+	
+	
 }
