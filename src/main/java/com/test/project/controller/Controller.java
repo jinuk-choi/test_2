@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
@@ -15,26 +14,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.test.project.domain.User;
 import com.test.project.domain.Board;
+import com.test.project.domain.Comment;
 import com.test.project.domain.Pagination;
 import com.test.project.domain.Search;
-import com.test.project.domain.User;
 import com.test.project.service.BoardService;
+import com.test.project.service.CommentService;
 import com.test.project.service.UserService;
 
 
 @org.springframework.stereotype.Controller
 public class Controller {
 	Board board = null;
+	Comment comment = null;
 	int count = 0;
 	int page = 1;
 	Pagination pagination = null;
 	List<Board> boardList = null;
+	List<Comment> commentList = null;
 	
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired UserService userservice;
 	@Autowired BoardService boardservice;
+	@Autowired CommentService commentservice;
 	
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -132,6 +136,28 @@ public class Controller {
 		model.addAttribute("list", boardList);
 		model.addAttribute("board", board);
 		return "/boardlist";
+	}
+	
+	@RequestMapping("/aj-comment-list") 
+	public String commentList(Board board,Model model) {
+		commentList = commentservice.selectCommentList(board);
+		count = commentservice.commentCount(board);
+		pagination = new Pagination(page, count);
+		board.setPagination(pagination);
+		
+		model.addAttribute("list", commentList);
+		model.addAttribute("pagination", pagination);
+		return "/commentlist";
+	}
+	
+	@RequestMapping("/aj-comment-insert") 
+	public String commentInsert(Comment comment,Model model) {
+		commentservice.insertComment(comment);
+		commentList = commentservice.selectCommentList(board);
+		
+		model.addAttribute("list", commentList);
+		model.addAttribute("pagination", pagination);
+		return "/commentlist";
 	}
 	
 	@RequestMapping("/beforeSignUp") 

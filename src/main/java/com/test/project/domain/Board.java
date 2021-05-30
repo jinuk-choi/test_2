@@ -8,10 +8,17 @@ public class Board {
 	private String aDate;
 	private int rownum;
 	private User user;
+	private Pagination pagination;
 	private int aGroup;
 	private int aOrder;
 	private int aDepth;
 	
+	public Pagination getPagination() {
+		return pagination;
+	}
+	public void setPagination(Pagination pagination) {
+		this.pagination = pagination;
+	}
 	
 	public int getaGroup() {
 		return aGroup;
