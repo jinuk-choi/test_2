@@ -11,9 +11,30 @@ public class Comment {
 	private User user;
 	private Pagination pagination;
 	private Board board;
+	private int bGroup;
+	private int bOrder;
+	private int bDepth;
 	
 	
 	
+	public int getbGroup() {
+		return bGroup;
+	}
+	public void setbGroup(int bGroup) {
+		this.bGroup = bGroup;
+	}
+	public int getbOrder() {
+		return bOrder;
+	}
+	public void setbOrder(int bOrder) {
+		this.bOrder = bOrder;
+	}
+	public int getbDepth() {
+		return bDepth;
+	}
+	public void setbDepth(int bDepth) {
+		this.bDepth = bDepth;
+	}
 	public int getbIdx() {
 		return bIdx;
 	}

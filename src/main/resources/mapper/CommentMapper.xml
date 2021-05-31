@@ -48,6 +48,11 @@
 	      
 </insert>
 
+<!-- 댓글 삭제 -->
+<delete id="commentDelete" parameterType="Comment">
+    	 DELETE FROM comment
+    	 WHERE		 b_idx = #{bIdx}  		   	
+</delete>
 
 
 

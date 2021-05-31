@@ -13,12 +13,19 @@
 			<div><button type="button" class="btnUpdateForm">수정</button></div>&emsp;
 			<div><button type="button" class="btnDeletForm" bIdx="${comment.bIdx}">삭제</button></div>			
 		</div>
-			<div class="myFlex" style="display: show;">
+			<div class="myFlex" style="display: none;">
 				<div>작성자 : ${comment.user.uName}</div>&emsp;&emsp;
 				<div>내용 : <textarea rows="1" cols="50"  class="editcon">${comment.bContent}</textarea></div>&emsp;&emsp;
 				<div><button type="button" class="btnEditForm" b_idx="${comment.bIdx}" >등록</button></div>
 				<div><a href="">취소</a></div>
 			</div>
+			<div class="myFlex" style="display: none;">
+				<div>작성자 :${principal.uName }</div>&emsp;&emsp;
+				<div>내용 : <textarea rows="2" cols="50"  class="insertcon"></textarea></div>&emsp;&emsp;
+				<div><button type="button" class="btnInForm" b_idx="${comment.bIdx}" b_group="${comment.bGroup}" b_order="${comment.bOrder}"  b_depth="${comment.bDepth}" >등록</button></div>
+				<div><a href="">취소</a></div>
+			</div>
+			
 	</c:forEach>
 <ul>
  <c:choose>

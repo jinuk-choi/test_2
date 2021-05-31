@@ -16,5 +16,7 @@ public interface CommentMapper {
 	
 	public void insertComment(Comment comment);
 	
+	public void commentDelete(Comment comment);
+	
 }
 

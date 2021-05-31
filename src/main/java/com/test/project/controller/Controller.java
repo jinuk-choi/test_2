@@ -176,6 +176,17 @@ public class Controller {
 		return "/commentlist";
 	}
 	
+	@RequestMapping("/aj-comment-delete") 
+	public String commentDelete(Comment comment,Model model) {
+		commentservice.commentDelete(comment);
+		commentList = commentservice.selectCommentList(board);
+		board.setPagination(pagination);
+		
+		model.addAttribute("list", commentList);
+		model.addAttribute("pagination", pagination);
+		return "/commentlist";
+	}
+	
 	@RequestMapping("/beforeSignUp") 
 	public String beforeSignUp() {
 		return "/signup";
