@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
@@ -16,25 +15,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.test.project.domain.Board;
+import com.test.project.domain.Comment;
 import com.test.project.domain.Pagination;
 import com.test.project.domain.Search;
 import com.test.project.domain.User;
 import com.test.project.service.BoardService;
+import com.test.project.service.CommentService;
 import com.test.project.service.UserService;
 
 
 @org.springframework.stereotype.Controller
 public class Controller {
 	Board board = null;
+	Comment comment = null;
 	int count = 0;
 	int page = 1;
 	Pagination pagination = null;
 	List<Board> boardList = null;
+	List<Comment> commentList = null;
 	
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired UserService userservice;
 	@Autowired BoardService boardservice;
+	@Autowired CommentService commentservice;
 	
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -74,10 +78,21 @@ public class Controller {
 		return "/boardlist";
 	}
 	
-	@RequestMapping("/boarddetail")
-	public String boardDetail(@RequestParam("aIdx") int aIdx, Model model) {			    
+	@RequestMapping({"/boarddetail","/boarddetail/{pageOpt}"})
+	public String boardDetail(Model model,
+			@RequestParam("aIdx") int aIdx,
+			@PathVariable Optional<Integer> pageOpt) {			    
 	
 		board = boardservice.selectBoard(aIdx);
+		int page = pageOpt.isPresent() ? pageOpt.get() : 1;
+		count = commentservice.commentCount(board);
+		pagination = new Pagination(page, count);
+		board.setPagination(pagination);
+		
+		commentList = commentservice.selectCommentList(board);
+		
+		model.addAttribute("list", commentList);
+		model.addAttribute("pagination", pagination);
 		model.addAttribute("board", board);
 		
 		return "/boarddetail";
@@ -132,6 +147,33 @@ public class Controller {
 		model.addAttribute("list", boardList);
 		model.addAttribute("board", board);
 		return "/boardlist";
+	}
+	
+	@RequestMapping({"/aj-comment-list","/aj-comment-list/{pageOpt}"}) 
+	public String commentList(Board board,Model model,
+			@PathVariable Optional<Integer> pageOpt) {
+		
+		int page = pageOpt.isPresent() ? pageOpt.get() : 1;
+		count = commentservice.commentCount(board);
+		pagination = new Pagination(page, count);
+		board.setPagination(pagination);
+		
+		commentList = commentservice.selectCommentList(board);
+		
+		model.addAttribute("list", commentList);
+		model.addAttribute("pagination", pagination);
+		return "/commentlist";
+	}
+	
+	@RequestMapping("/aj-comment-insert") 
+	public String commentInsert(Comment comment,Model model) {
+		commentservice.insertComment(comment);
+		commentList = commentservice.selectCommentList(board);
+		board.setPagination(pagination);
+		
+		model.addAttribute("list", commentList);
+		model.addAttribute("pagination", pagination);
+		return "/commentlist";
 	}
 	
 	@RequestMapping("/beforeSignUp") 

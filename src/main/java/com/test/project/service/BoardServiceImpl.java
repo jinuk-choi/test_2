@@ -28,10 +28,19 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	public void insertBoard(Board board) {
+	
 		logger.debug("before board: " + board);
+		//board.setaDepth(board.getaDepth() + 1);
 		boardmapper.insertBoard(board);
 		logger.debug("after board: " + board);
-		//boardmapper.updateBoard(board);
+		
+		if (board.getaGroup() == 0) {
+			boardmapper.updateBoard(board);
+		
+		} else { 
+			boardmapper.updateReBoard(board);
+		}
+		
 	}
 	
 	public void editBoard(Board board) {

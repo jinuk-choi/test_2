@@ -20,6 +20,8 @@ public interface BoardMapper {
 	
 	public int countBoard(Search search);
 	
-	//public void updateBoard(Board board);
+	public void updateBoard(Board board);
+	
+	public void updateReBoard(Board board);
 }
 

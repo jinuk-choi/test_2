@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.test.project.mapper.BoardMapper">
+
  <!-- 게시글 목록 -->
 <resultMap type="User" id="User">
 	<result column="u_idx" property="uIdx"/>
@@ -17,6 +18,7 @@
 	<result column="a_group" property="aGroup"/>
 	<result column="a_order" property="aOrder"/>
 	<result column="a_depth" property="aDepth"/>
+	<result column="rownum" property="rownum"/>
 	<association property="user" resultMap="User"/>
 </resultMap> 
  
@@ -71,63 +73,37 @@
 			#{aContent},
 			#{aGroup},
 			#{aOrder},
-			#{aDepth},
+			#{aDepth} + 1,
 			#{uIdx}
 		)
-		
-	  	<selectKey keyProperty="aIdx" resultType="Integer">
+		<selectKey keyProperty="aIdx" resultType="Integer">
 	        SELECT LAST_INSERT_ID()
-	    </selectKey>
+	    </selectKey>	
 	</insert> 
+	
+	<update id="updateBoard" parameterType="Board" >
+		UPDATE board SET a_group = LAST_INSERT_ID() WHERE a_idx = LAST_INSERT_ID()
+	</update>
 
-<!-- 게시글 답글 -->
-<!--  	<insert id="updateBoard" parameterType="Board" >
-    	
-		INSERT INTO board (
-			a_title,
-			a_content,
-			a_group,
-			a_order,
-			a_depth,
-			u_idx
-		) VALUES (
-			#{aTitle},
-			#{aContent},
-			#{aGroup},
-			#{aOrder},
-			#{aDepth},
-			#{uIdx}
-		)
-		
-	  	<selectKey keyProperty="aIdx" resultType="Integer">
-	        SELECT LAST_INSERT_ID()
-	    </selectKey>
-	</insert> 
--->
-	
-	
-	<!--
-	  <if test="aGroup == 0">
-			UPDATE board SET a_group = LAST_INSERT_ID() WHERE a_idx = LAST_INSERT_ID()
-		</if>
-		<if test="aGroup != 0">
-			UPDATE board SET a_order = a_order + 1 where a_group = #{aGroup} and a_order >= #{aOrder} and a_idx != last_insert_id()
-		</if>   -->
+	<update id="updateReBoard" parameterType="Board" >
+		UPDATE board SET a_order = a_order + 1 where a_group = #{aGroup} and a_order >= #{aOrder} and a_idx 
+	</update> 
+	 
 	 
 
 <!-- 게시글 수정하기 -->
-	<insert id="editBoard" parameterType="Board">
+	<update id="editBoard" parameterType="Board">
 		UPDATE board 
 		SET 			a_title = #{aTitle},
 						a_content = #{aContent}
 		WHERE			a_idx = #{aIdx}	
-	</insert>      
+	</update>      
 
 <!-- 게시글 삭제하기 -->
-	<insert id="deleteBoard" parameterType="Board">
+	<delete id="deleteBoard" parameterType="Board">
 		DELETE FROM 	board
 		WHERE			a_idx = #{aIdx}	
-	</insert>      
+	</delete>      
 
 <!-- 게시글 갯수 -->
 	<select id="countBoard" resultType="int">

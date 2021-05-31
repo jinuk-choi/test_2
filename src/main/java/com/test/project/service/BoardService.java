@@ -18,5 +18,6 @@ public interface BoardService {
 	
 	public int countBoard(Search search);
 	
+
 	
 }

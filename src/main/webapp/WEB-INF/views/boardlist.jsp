@@ -93,7 +93,7 @@
 	</tr>
 		<c:forEach var="list" items="${list }">
 	      	<tr>
-	      		<td>${list.rownum }</td>
+	      		<td>${list.rownum}</td>
 	      		<td class="tdAlign">
 	      			<c:if test="${list.aDepth > 1 }">
 						<c:forEach begin="2" end="${list.aDepth}">
