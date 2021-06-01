@@ -27,10 +27,22 @@ public class CommentServiceImpl implements CommentService {
 		@Override
 		public void insertComment(Comment comment) {
 			commentmapper.insertComment(comment);
+			
+			if (comment.getbGroup() == 0) {
+				commentmapper.updateComment(comment);
+			
+			} else { 
+				commentmapper.updateReComment(comment);
+			}
 		}
 		
 		@Override
 		public void commentDelete(Comment comment) {
 			commentmapper.commentDelete(comment);
+		}
+		
+		@Override
+		public void editComment(Comment comment) {
+			commentmapper.editComment(comment);
 		}
 }

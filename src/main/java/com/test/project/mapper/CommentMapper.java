@@ -18,5 +18,10 @@ public interface CommentMapper {
 	
 	public void commentDelete(Comment comment);
 	
+	public void editComment(Comment comment);
+	
+	public void updateComment(Comment comment);
+	
+	public void updateReComment(Comment comment);
 }
 

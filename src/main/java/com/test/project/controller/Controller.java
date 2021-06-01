@@ -169,6 +169,21 @@ public class Controller {
 	public String commentInsert(Comment comment,Model model) {
 		commentservice.insertComment(comment);
 		commentList = commentservice.selectCommentList(board);
+		count = commentservice.commentCount(board);
+		pagination = new Pagination(page, count);
+		board.setPagination(pagination);
+		
+		model.addAttribute("list", commentList);
+		model.addAttribute("pagination", pagination);
+		return "/commentlist";
+	}
+	
+	@RequestMapping("/aj-comment-edit") 
+	public String commentEdit(Comment comment,Model model) {
+		commentservice.editComment(comment);
+		commentList = commentservice.selectCommentList(board);
+		count = commentservice.commentCount(board);
+		pagination = new Pagination(page, count);
 		board.setPagination(pagination);
 		
 		model.addAttribute("list", commentList);
@@ -180,6 +195,8 @@ public class Controller {
 	public String commentDelete(Comment comment,Model model) {
 		commentservice.commentDelete(comment);
 		commentList = commentservice.selectCommentList(board);
+		count = commentservice.commentCount(board);
+		pagination = new Pagination(page, count);
 		board.setPagination(pagination);
 		
 		model.addAttribute("list", commentList);

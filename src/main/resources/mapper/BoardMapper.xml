@@ -86,7 +86,7 @@
 	</update>
 
 	<update id="updateReBoard" parameterType="Board" >
-		UPDATE board SET a_order = a_order + 1 where a_group = #{aGroup} and a_order >= #{aOrder} and a_idx 
+		UPDATE board SET a_order = a_order + 1 where a_group = #{aGroup} and a_order >= #{aOrder} and a_idx != last_insert_id() 
 	</update> 
 	 
 	 

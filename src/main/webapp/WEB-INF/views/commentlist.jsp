@@ -7,7 +7,16 @@
 <p>전체 댓글 수 : ${pagination.count }</p>
 	<c:forEach items="${list}" var="comment" varStatus="status">
 		<div class="myFlex">
-			<div>작성자 : ${comment.user.uName}</div>&emsp;&emsp;
+			<div>
+				<c:if test="${comment.bDepth > 1 }">
+					<c:forEach begin="2" end="${comment.bDepth}">
+						&nbsp;&nbsp;
+					</c:forEach>
+					<c:forEach begin="2" end="${comment.bDepth}">
+						┕
+					</c:forEach>
+				</c:if>작성자 : ${comment.user.uName}
+			</div>&emsp;&emsp;	
 			<div>내용 : ${comment.bContent}</div>&emsp;&emsp;
 			<div><button type="button" class="btnInsertForm">답글</button></div>&emsp;							
 			<div><button type="button" class="btnUpdateForm">수정</button></div>&emsp;

@@ -64,7 +64,7 @@
 	<input type="hidden" name="aIdx" value="${board.aIdx}">
 	<p> 작성자 : ${principal.uName }</p>
 	<p> 내용 : <input type="text" style="width:500px; height:50px;" name="content" id="content" >&emsp; 
-		<input type="button" value="작성하기" id="btnReg" >
+		<input type="button" value="작성하기" id="btnReg"  b_order="0" b_depth="0" b_group="0">
 	</p>
 </div>
 <h2> 댓글 보기 </h2>
@@ -74,7 +74,16 @@
 <p>전체 댓글 수 : ${pagination.count }</p>
 	<c:forEach items="${list}" var="comment" varStatus="status">
 		<div class="myFlex">
-			<div>작성자 : ${comment.user.uName}</div>&emsp;&emsp;
+			<div>
+				<c:if test="${comment.bDepth > 1 }">
+					<c:forEach begin="2" end="${comment.bDepth}">
+						&nbsp;&nbsp;
+					</c:forEach>
+					<c:forEach begin="2" end="${comment.bDepth}">
+						┕
+					</c:forEach>
+				</c:if>작성자 : ${comment.user.uName}
+			</div>&emsp;&emsp;	
 			<div>내용 : ${comment.bContent}</div>&emsp;&emsp;
 			<div><button type="button" class="btnInsertForm">답글</button></div>&emsp;							
 			<div><button type="button" class="btnUpdateForm">수정</button></div>&emsp;
@@ -139,12 +148,15 @@ $(document).on('click', '.btnInsertForm', function () {
 	viewDiv.hide();
 });
 
+/*댓글 작성*/
 $(document).on('click', '#btnReg', function () {
 	let uIdx = '${principal.uIdx}';
 	let bContent = $('#content').val();
 	let aIdx = '${board.aIdx}';
 	let count = '${pagination.count }';
-	
+	let b_depth = $(this).attr('b_depth');
+	let b_order = $(this).attr('b_order');
+	let b_group = $(this).attr('b_group');
 	
 	
 	$.ajax({
@@ -154,9 +166,71 @@ $(document).on('click', '#btnReg', function () {
 			 uIdx: uIdx, 
 			 bContent: bContent,
 			 aIdx: aIdx,
+			 count: count,
+			 bGroup: b_group,
+			 bDepth: b_depth,
+			 bOrder: b_order
+			 
+		 }
+	})
+	.done(function( data ) {
+	 	 console.log(data);
+	 	 $('#commentList').html(data);
+	});
+});
+
+/*답글 작성*/
+$(document).on('click', '.btnInForm', function () {
+	let insertcon = $(this).parent().prev().find('.insertcon').val();
+	let uIdx = '${principal.uIdx}';
+	let aIdx = '${board.aIdx}';
+	let bIdx = $(this).attr('b_idx');
+	let count = '${pagination.count }';
+	let b_depth = $(this).attr('b_depth');
+	let b_order = $(this).attr('b_order');
+	let b_group = $(this).attr('b_group');
+
+	$.ajax({
+		 method: "POST",
+		 url: "aj-comment-insert",
+		 data: { 
+	
+			 bContent: insertcon,
+			 uIdx: uIdx,
+			 aIdx: aIdx,
+			 bIdx: bIdx,
+			 count: count,
+			 bDepth: b_depth,
+			 bOrder: b_order,
+			 bGroup: b_group		 	 
+
+		 }
+	})
+	.done(function( data ) {
+	 	 console.log(data);
+	 	 $('#commentList').html(data);
+	});
+});
+
+/*댓글 수정*/
+$(document).on('click', '.btnEditForm', function () {
+	let editcon = $(this).parent().prev().find('.editcon').val();
+	let b_idx = $(this).attr('b_idx');
+	let a_idx = '${board.aIdx}';
+	let count = '${pagination.count }';
+	let uIdx = '${principal.uIdx}';
+
+	$.ajax({
+		 method: "POST",
+		 url: "aj-comment-edit",
+		 data: { 
+	
+			 bContent: editcon,
+			 bIdx: b_idx,
+			 aIdx: a_idx,
+			 uIdx: uIdx,
 			 count: count
-			 
-			 
+
 		 }
 	})
 	.done(function( data ) {
@@ -192,7 +266,7 @@ $(document).on('click', '.page', function () {
 	
 	$.ajax({
 		 method: "GET",
-		 url: "aj-comment-list",
+		 url: "aj-comment-list/"+page,
 		 data: { 	
 			 aIdx: aIdx,
 			 pageOpt: page

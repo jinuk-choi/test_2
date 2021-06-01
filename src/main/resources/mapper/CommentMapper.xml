@@ -15,6 +15,11 @@
 	<result column="b_content" property="bContent"/>
 	<result column="b_redate" property="bRedate"/>
 	<result column="a_idx" property="aIdx"/>
+	<result column="b_group" property="bGroup"/>
+	<result column="b_order" property="bOrder"/>
+	<result column="b_depth" property="bDepth"/>
+	
+	
 	<association property="user" resultMap="User"/>
 </resultMap> 
 
@@ -22,7 +27,8 @@
     	  SELECT         ta.*, tb.u_idx, tb.u_name		             
 	      FROM           comment ta
 	      LEFT JOIN 	 user tb ON ta.u_idx = tb.u_idx	
-	      WHERE			 a_idx = #{aIdx}				  	  		   	
+	      WHERE			 a_idx = #{aIdx}		
+	      ORDER BY		 b_group DESC, b_order DESC		  	  		   	
 	      LIMIT			 #{pagination.pageNum},3
 </select>
 
@@ -39,14 +45,41 @@
     	  INSERT INTO comment (
 			u_idx,
 			a_idx,
-			b_content
+			b_content,
+			b_group,
+			b_order,
+			b_depth
+			
 		) VALUES (
 			#{uIdx},
 			#{aIdx},
-			#{bContent}		
-		)			  	  		   	
+			#{bContent},
+			#{bGroup},
+			#{bOrder},
+			#{bDepth} + 1		
+		)
+		
+		<selectKey keyProperty="bIdx" resultType="Integer">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>			  	  		   	
 	      
 </insert>
+
+<update id="updateComment" parameterType="Comment" >
+	UPDATE comment SET b_group = LAST_INSERT_ID() WHERE b_idx = LAST_INSERT_ID()
+</update>
+
+<update id="updateReComment" parameterType="Comment" >
+	UPDATE comment SET b_order = b_order + 1 where b_group = #{bGroup} and b_order >= #{bOrder} and b_idx != last_insert_id()
+</update> 
+
+<!-- 댓글 수정 -->
+<update id="editComment" parameterType="Comment">
+	UPDATE  comment
+	SET		b_content = #{bContent}
+	WHERE	b_idx = #{bIdx}	   	
+	      
+</update>
 
 <!-- 댓글 삭제 -->
 <delete id="commentDelete" parameterType="Comment">

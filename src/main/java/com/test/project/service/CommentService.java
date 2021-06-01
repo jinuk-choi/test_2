@@ -12,6 +12,8 @@ public interface CommentService {
 	
 	public void insertComment(Comment comment);
 	
+	public void editComment(Comment comment);
+	
 	public void commentDelete(Comment comment);
 	
 }
