@@ -47,16 +47,36 @@
 			<br>
 			<p> 내용 : ${board.aContent}</p>
 <table>
+<sec:authentication property="principal" var="principal" />
 	<tr style="height:50px;">	
-		<td style="border:none; display:show;">
-			<a href="/boardedit?aIdx=${board.aIdx}" style="width:70%;font-weight:700;background-color:#818181;color:#fff;" >수정</a>
-		</td>
-		<td style="border:none; display:show;">
-			<a href="/boardelete?aIdx=${board.aIdx}" style="width:70%;font-weight:700;background-color:red;color:#fff;" >삭제</a>
-		</td>
-		<td style="border:none;">
-				 <a href="/boardinsert?aGroup=${board.aGroup}&aOrder=${board.aOrder}&aDepth=${board.aDepth}" style="width:80%;font-weight:700;background-color:#818181;color:#fff;" >답글쓰기</a>
-		</td>
+		<c:choose>
+			<c:when test="${principal.uName == board.user.uName }">
+				<td style="border:none; display:show;">
+					<a href="/boardedit?aIdx=${board.aIdx}" style="width:70%;font-weight:700;background-color:#818181;color:#fff;" >수정</a>
+				</td>
+			</c:when>
+			<c:otherwise>
+				<td style="border:none; display:none;">
+					<a href="/boardedit?aIdx=${board.aIdx}" style="width:70%;font-weight:700;background-color:#818181;color:#fff;" >수정</a>
+				</td>
+			</c:otherwise>
+		</c:choose>
+		<sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"></sec:authorize>
+		<c:choose>
+			<c:when test="${principal.uName == board.user.uName || isAdmin }">
+				<td style="border:none; display:show;">
+					<a href="/boardelete?aIdx=${board.aIdx}" style="width:70%;font-weight:700;background-color:red;color:#fff;" >삭제</a>
+				</td>
+			</c:when>
+			<c:otherwise>
+				<td style="border:none; display:none;">
+					<a href="/boardelete?aIdx=${board.aIdx}" style="width:70%;font-weight:700;background-color:red;color:#fff;" >삭제</a>
+				</td>
+			</c:otherwise>
+		</c:choose>	
+			<td style="border:none;">
+				<a href="/boardinsert?aGroup=${board.aGroup}&aOrder=${board.aOrder}&aDepth=${board.aDepth}" style="width:80%;font-weight:700;background-color:#818181;color:#fff;" >답글쓰기</a>
+			</td>	
 </table>
 <h2>댓글 작성</h2>
 <div>
@@ -74,6 +94,7 @@
 <p>전체 댓글 수 : ${pagination.count }</p>
 	<c:forEach items="${list}" var="comment" varStatus="status">
 		<div class="myFlex">
+		<sec:authentication property="principal" var="principal" />
 			<div>
 				<c:if test="${comment.bDepth > 1 }">
 					<c:forEach begin="2" end="${comment.bDepth}">
@@ -85,9 +106,24 @@
 				</c:if>작성자 : ${comment.user.uName}
 			</div>&emsp;&emsp;	
 			<div>내용 : ${comment.bContent}</div>&emsp;&emsp;
-			<div><button type="button" class="btnInsertForm">답글</button></div>&emsp;							
-			<div><button type="button" class="btnUpdateForm">수정</button></div>&emsp;
-			<div><button type="button" class="btnDeletForm" bIdx="${comment.bIdx}">삭제</button></div>			
+			<div><button type="button" class="btnInsertForm">답글</button></div>&emsp;	
+				<c:choose>
+					<c:when test="${principal.uName == comment.user.uName }">
+						<div><button type="button" style="display:show;" class="btnUpdateForm">수정</button></div>&emsp;
+					</c:when>
+					<c:otherwise>
+						<div><button type="button" style="display:none;" class="btnUpdateForm">수정</button></div>&emsp;
+					</c:otherwise>
+				</c:choose>
+				<sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"></sec:authorize>
+				<c:choose>
+					<c:when test="${principal.uName == comment.user.uName || isAdmin }">
+						<div><button type="button" style="display:show;" class="btnDeletForm" bIdx="${comment.bIdx}">삭제</button></div>	
+					</c:when>
+					<c:otherwise>
+						<div><button type="button" style="display:none;" class="btnDeletForm" bIdx="${comment.bIdx}">삭제</button></div>	
+					</c:otherwise>
+				</c:choose>															
 		</div>
 			<div class="myFlex" style="display: none;">
 				<div>작성자 : ${comment.user.uName}</div>&emsp;&emsp;

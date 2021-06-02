@@ -7,6 +7,7 @@
 <p>전체 댓글 수 : ${pagination.count }</p>
 	<c:forEach items="${list}" var="comment" varStatus="status">
 		<div class="myFlex">
+		<sec:authentication property="principal" var="principal" />
 			<div>
 				<c:if test="${comment.bDepth > 1 }">
 					<c:forEach begin="2" end="${comment.bDepth}">
@@ -18,9 +19,24 @@
 				</c:if>작성자 : ${comment.user.uName}
 			</div>&emsp;&emsp;	
 			<div>내용 : ${comment.bContent}</div>&emsp;&emsp;
-			<div><button type="button" class="btnInsertForm">답글</button></div>&emsp;							
-			<div><button type="button" class="btnUpdateForm">수정</button></div>&emsp;
-			<div><button type="button" class="btnDeletForm" bIdx="${comment.bIdx}">삭제</button></div>			
+			<div><button type="button" class="btnInsertForm">답글</button></div>&emsp;	
+				<c:choose>
+					<c:when test="${principal.uName == comment.user.uName }">
+						<div><button type="button" style="display:show;" class="btnUpdateForm">수정</button></div>&emsp;
+					</c:when>
+					<c:otherwise>
+						<div><button type="button" style="display:none;" class="btnUpdateForm">수정</button></div>&emsp;
+					</c:otherwise>
+				</c:choose>
+				<sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"></sec:authorize>
+				<c:choose>
+					<c:when test="${principal.uName == comment.user.uName || isAdmin }">
+						<div><button type="button" style="display:show;" class="btnDeletForm" bIdx="${comment.bIdx}">삭제</button></div>	
+					</c:when>
+					<c:otherwise>
+						<div><button type="button" style="display:none;" class="btnDeletForm" bIdx="${comment.bIdx}">삭제</button></div>	
+					</c:otherwise>
+				</c:choose>															
 		</div>
 			<div class="myFlex" style="display: none;">
 				<div>작성자 : ${comment.user.uName}</div>&emsp;&emsp;

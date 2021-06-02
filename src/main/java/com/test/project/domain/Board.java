@@ -13,6 +13,7 @@ public class Board {
 	private int aOrder;
 	private int aDepth;
 	
+	
 	public Pagination getPagination() {
 		return pagination;
 	}
