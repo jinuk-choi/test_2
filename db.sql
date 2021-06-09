@@ -18,11 +18,11 @@ USE `test2`;
 
 -- 테이블 test2.tb_board 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tb_board` (
-  `idx` int(11) NOT NULL AUTO_INCREMENT,
+  `idx` int(50) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) DEFAULT NULL,
   `contents` varchar(300) DEFAULT NULL,
   `indate` date DEFAULT current_timestamp(),
-  `COUNT` int(100) DEFAULT 0,
+  `COUNT` int(200) DEFAULT 0,
   `writer` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idx`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS `tb_board` (
 -- 테이블 데이터 test2.tb_board:~16 rows (대략적) 내보내기
 /*!40000 ALTER TABLE `tb_board` DISABLE KEYS */;
 INSERT INTO `tb_board` (`idx`, `title`, `contents`, `indate`, `COUNT`, `writer`) VALUES
-	(2, '수정', '수정', '2021-06-07', 8, '수정'),
-	(3, 'ㅎㅇ', '가즈아', '2021-06-07', 7, '잉어'),
-	(11, 'd', 'd', '2021-06-07', 3, 'd'),
+	(2, '수정', '수정', '2021-06-07', 161, '수정'),
+	(3, 'ㅎㅇ', '가즈아', '2021-06-07', 19, '잉어'),
+	(11, 'd', 'd', '2021-06-07', 5, 'd'),
 	(13, 'ㅇ', 'ㅇ', '2021-06-08', 1, 'ㅇ'),
 	(14, 'ㅎㅎ', 'ㅎㅎ', '2021-06-08', 0, 'ㅎㅎ'),
 	(15, 'ㄷㄷ', 'ㄷㄷ', '2021-06-08', 0, 'ㄷㄷ'),
@@ -48,6 +48,24 @@ INSERT INTO `tb_board` (`idx`, `title`, `contents`, `indate`, `COUNT`, `writer`)
 	(25, 'sdf', 'sdf', '2021-06-08', 0, 'sdfs');
 /*!40000 ALTER TABLE `tb_board` ENABLE KEYS */;
 
+-- 테이블 test2.tb_reply 구조 내보내기
+CREATE TABLE IF NOT EXISTS `tb_reply` (
+  `seq` int(100) NOT NULL,
+  `idx` int(100) NOT NULL,
+  `reply` varchar(50) DEFAULT NULL,
+  `writer` varchar(50) DEFAULT NULL,
+  `indate` date DEFAULT current_timestamp(),
+  PRIMARY KEY (`seq`,`idx`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 test2.tb_reply:~3 rows (대략적) 내보내기
+/*!40000 ALTER TABLE `tb_reply` DISABLE KEYS */;
+INSERT INTO `tb_reply` (`seq`, `idx`, `reply`, `writer`, `indate`) VALUES
+	(4, 2, 'ㄴㅇㅎㅇㅀㅇㄹ', '관리자', '2021-06-09'),
+	(5, 2, 'ㄴㄹㄷㅈ', '관리자', '2021-06-09'),
+	(6, 2, 'ㄴㅇㄹㄴㅇㄹ', '관리자', '2021-06-09');
+/*!40000 ALTER TABLE `tb_reply` ENABLE KEYS */;
+
 -- 테이블 test2.tb_user 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tb_user` (
   `user_id` varchar(50) NOT NULL,
@@ -56,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `tb_user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 테이블 데이터 test2.tb_user:~2 rows (대략적) 내보내기
+-- 테이블 데이터 test2.tb_user:~3 rows (대략적) 내보내기
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
 INSERT INTO `tb_user` (`user_id`, `password`, `user_name`) VALUES
 	('admin', 'manager', '관리자'),
